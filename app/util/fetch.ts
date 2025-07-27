@@ -1,15 +1,17 @@
 import { cookies } from "next/headers";
-import { API_URL } from "../common/constants/api";
 import { getErrorMessage } from "./errors";
+import { API_URL } from "../common/constants/api";
 
-const getHeaders = () => ({
-  Cookie: cookies().toString(),
+// 1. Fonksiyonu "async" olarak değiştir ve "cookies()" çağrısına "await" ekle
+const getHeaders = async () => ({
+  Cookie: (await cookies()).toString(),
 });
 
 export const post = async (path: string, formData: FormData) => {
   const res = await fetch(`${API_URL}/${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...getHeaders() },
+    // 2. "getHeaders()" fonksiyonu artık async olduğu için "await" ile çağır
+    headers: { "Content-Type": "application/json", ...(await getHeaders()) },
     body: JSON.stringify(Object.fromEntries(formData)),
   });
   const parsedRes = await res.json();
@@ -21,7 +23,8 @@ export const post = async (path: string, formData: FormData) => {
 
 export const get = async (path: string) => {
   const res = await fetch(`${API_URL}/${path}`, {
-    headers: { ...getHeaders() },
+    // 3. "getHeaders()" fonksiyonunu burada da "await" ile çağır
+    headers: { ...(await getHeaders()) },
   });
   return res.json();
 };
