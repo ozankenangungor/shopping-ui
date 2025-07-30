@@ -23,7 +23,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body >
         <Providers authenticated={isAuthenticated}>
           <CssBaseline />
           <Header logout={logout} />

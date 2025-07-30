@@ -21,10 +21,12 @@ export const post = async (path: string, formData: FormData) => {
   return { error: "" };
 };
 
-export const get = async (path: string) => {
+export const get = async <T>(path: string, tags?: string[]) => {
   const res = await fetch(`${API_URL}/${path}`, {
-    // 3. "getHeaders()" fonksiyonunu burada da "await" ile çağır
     headers: { ...(await getHeaders()) },
+    next: { tags },
   });
-  return res.json();
+  return res.json() as T;
 };
+
+
