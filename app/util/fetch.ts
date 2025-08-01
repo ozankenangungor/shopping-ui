@@ -32,9 +32,10 @@ export const post = async (path: string, formData: FormData) => {
   return { error: "", data: parsedRes };
 };
 
-export const get = async <T>(path: string, tags?: string[]) => {
+export const get = async <T>(path: string, tags?: string[], params?: URLSearchParams) => {
+  const url = params ? `${API_URL}/${path}?` + params : `${API_URL}/${path}`
   const cookieStore = await cookies();
-  const res = await fetch(`${API_URL}/${path}`, {
+  const res = await fetch(url, {
     headers: { Cookie: cookieStore.toString() },
     next: { tags },
   });
